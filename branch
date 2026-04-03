@@ -1,0 +1,111 @@
+import time, sys
+
+total_savings = 0.00
+total_expense = 0.00
+record = []
+
+def welcome_menu():
+    print("*" * 51)
+    print("ReLax-lah Expenses & Savings Tracker".center(51))
+    print("*" * 51)
+
+def choose_functions():
+    print("")
+    print("So then, what are you going to do now?")
+    print("1. Add Saving Information")
+    print("2. Add Expense Information")
+    print("3. Review Records")
+    print("4. View Performance")
+    print("5. Exit")
+    
+    print("Please type in the number based on the function that you want to perform")
+    func_input = input("Enter a number: (1 for savings, etc.): ")
+
+    if func_input == "1":
+        add_saving()
+    elif func_input == "2":
+        add_expense()
+    elif func_input == "3":
+        print('3')
+    elif func_input == "4":
+        view_performance()
+    elif func_input == "5":
+        print("Exiting now...")
+        time.sleep(3)
+        sys.exit()
+    else:
+        print("Input error")
+        
+
+def add_saving():
+
+    global total_savings
+    
+    print("Enter the credential of your saving")
+    amount = float(input("Amount: "))
+    transaction_type = input("Transaction Type (Income/Expense): ")
+    description = input("Description: ")
+
+    total_savings += amount
+
+    saving = {"amount": amount,
+              "date": time.ctime(),
+              "transaction_type": transaction_type,
+              "description": description}
+
+    print("*** Saving Information ***")
+    print(f"Saving Amount: RM{saving['amount']}")
+    print(f"Date: {saving['date']}")
+    print(f"Transaction Type: {saving['transaction_type']}")
+    print(f"Description: {saving['description']}")
+    print("Saving added!")
+    
+
+def add_expense():
+
+    global total_savings
+    global total_expense
+    
+    print("Enter the credential of your expense")
+    amount = float(input("Amount: "))
+    transaction_type = input("Transaction Type (Income/Expense): ")
+    category = input("Category: ")
+    description = input("Description: ")
+
+    total_expense += amount
+    total_savings -= amount
+
+    saving = {"amount": amount,
+              "date": time.ctime(),
+              "transaction_type": transaction_type,
+              "category": category,
+              "description": description}
+    
+    print("*** Expense Information ***")
+    print(f"Saving Amount: RM{saving['amount']}")
+    print(f"Date: {saving['date']}")
+    print(f"Transaction Type: {saving['transaction_type']}")
+    print(f"Description: {saving['description']}")
+    print("Expense added!")
+
+#def view_records():
+
+    
+def view_performance():
+    global total_expense, total_savings
+
+    
+    print("*** PERFORMANCE ***")
+    print(f"Total Savings: RM{total_savings:.2f}")
+    print(f"Total Expenses: RM{total_expense:.2f}")
+    
+
+ 
+def main():
+    welcome_menu()
+
+    while True:
+        choose_functions()  
+
+
+main()
