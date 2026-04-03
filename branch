@@ -1,6 +1,6 @@
 import time, sys
 
-total_savings = 0.00
+total_savings = 0.000
 total_expense = 0.00
 record = []
 
