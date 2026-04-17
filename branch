@@ -10,6 +10,7 @@ def welcome_menu():
     print("*" * 51)
 
 def choose_functions():
+    global total_savings, total_expense, record
     print("")
     print("So then, what are you going to do now?")
     print("1. Add Saving Information")
@@ -19,16 +20,16 @@ def choose_functions():
     print("5. Exit")
     
     print("Please type in the number based on the function that you want to perform")
-    func_input = input("Enter a number: (1 for savings, etc.): ")
+    func_input = input("Enter a number (1 for savings, etc.): ")
 
     if func_input == "1":
-        add_saving()
+        total_savings, record = add_saving(total_savings, record)
     elif func_input == "2":
-        add_expense()
+        total_expense, total_savings, record = add_expense(total_expense, total_savings, record)
     elif func_input == "3":
-        print('3')
+        view_records(record)
     elif func_input == "4":
-        view_performance()
+        view_performance(total_expense, total_savings)
     elif func_input == "5":
         print("Exiting now...")
         time.sleep(3)
@@ -37,62 +38,104 @@ def choose_functions():
         print("Input error")
         
 
-def add_saving():
-
-    global total_savings
+def add_saving(total_savings, record):
     
+    category_list = ["Salary", "Allowance", "Comission", "Investment", "Others"]
     print("Enter the credential of your saving")
     amount = float(input("Amount: "))
-    transaction_type = input("Transaction Type (Income/Expense): ")
+    print("The list below shows the category of saving that you can save:")
+    for index, cat in enumerate(category_list, start = 1):
+        print(f"{index}. {cat}")
+
+    category_choice = int(input("Enter your choice: "))
+    if 1 <= category_choice <= len(category_list):
+        category = category_list[category_choice - 1]
+    else:
+        print("Error. Please choose in between the list")
+        add_saving(total_savings, record)
+
     description = input("Description: ")
 
     total_savings += amount
 
     saving = {"amount": amount,
               "date": time.ctime(),
-              "transaction_type": transaction_type,
+              "transaction_type": "Income",
+              "category": category,
               "description": description}
+
+    record.append(saving)
 
     print("*** Saving Information ***")
     print(f"Saving Amount: RM{saving['amount']}")
     print(f"Date: {saving['date']}")
     print(f"Transaction Type: {saving['transaction_type']}")
+    print(f"Category: {saving['category']}")
     print(f"Description: {saving['description']}")
     print("Saving added!")
+
+    return total_savings, record
     
 
-def add_expense():
-
-    global total_savings
-    global total_expense
+def add_expense(total_expense, total_savings, record):
     
+    category_list = ["Food", "Transport", "Entertainment", "Bills", "Shopping", "Other"]
     print("Enter the credential of your expense")
     amount = float(input("Amount: "))
-    transaction_type = input("Transaction Type (Income/Expense): ")
-    category = input("Category: ")
+    print("The list below shows the category of saving that you can save:")
+    for index, cat in enumerate(category_list, start = 1):
+        print(f"{index}. {cat}")
+
+    category_choice = int(input("Enter your choice: "))
+    if 1 <= category_choice <= len(category_list):
+        category = category_list[category_choice - 1]
+    else:
+        print("Error. Please choose in between the list")
+        add_expense(total_expense, total_savings, record)
+
     description = input("Description: ")
 
     total_expense += amount
     total_savings -= amount
 
-    saving = {"amount": amount,
+    expense = {"amount": amount,
               "date": time.ctime(),
-              "transaction_type": transaction_type,
+              "transaction_type": "Expense",
               "category": category,
               "description": description}
     
+    record.append(expense)
+
     print("*** Expense Information ***")
-    print(f"Saving Amount: RM{saving['amount']}")
-    print(f"Date: {saving['date']}")
-    print(f"Transaction Type: {saving['transaction_type']}")
-    print(f"Description: {saving['description']}")
+    print(f"Expense Amount: RM{expense['amount']}")
+    print(f"Date: {expense['date']}")
+    print(f"Transaction Type: {expense['transaction_type']}")
+    print(f"Category: {expense['category']}")
+    print(f"Description: {expense['description']}")
     print("Expense added!")
 
-#def view_records():
+    return total_expense, total_savings, record
+
+def view_records(record):
+    print("*** Records Review ***")
+    
+    if len(record) == 0:
+        print("No records found!")
+    
+    print("============================")
+
+    for index, content in enumerate(record, start = 1):
+        print(f"Record #{index}")
+        print(f"Saving Amount: RM{content['amount']:.2f}")
+        print(f"Date: {content['date']}")
+        print(f"Transaction Type: {content['transaction_type']}")
+        print(f"Description: {content['description']}")
+        print("============================")
+
+
 
     
-def view_performance():
-    global total_expense, total_savings
+def view_performance(total_expense, total_savings):
 
     
     print("*** PERFORMANCE ***")
